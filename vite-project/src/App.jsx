@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import GridLayout from './grid-layout'
 import './App.css'
 
 function App() {
@@ -6,8 +7,8 @@ function App() {
 
   return (
     <>
-
-      <h1>rrr</h1>
+  <GridLayout></GridLayout>
+      
 
     </>
   )
