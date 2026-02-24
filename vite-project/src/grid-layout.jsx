@@ -28,9 +28,27 @@ export default function GridLayout() {
 
 
     return (
-        <section className='bg-blue-800 p-6 text-center'>
+        <section className='bg-[#182033]  text-center'>
+            <header className='flex justify-between relative border-b-2  '>
+                <p className='text-4xl'>📡</p>
+                <h1 className='text-white text-3xl font-bold'>Bomb Detection Application</h1>
+                <p className='text-green-400'>Simulation Active</p>
+            </header>
+            <h2 className='text-white border-t-2 border-b-2 mt-4 p-4'>Locate and neutralize all bombs before time runs out.</h2>
+            <div className='flex justify-around h-30'>
+                <div className='flex flex-col text-white border-2 shadow'>
+                    <p className='border-b-2 p-4'>💣 Bomb Reamining</p>
 
-            <h1 className='text-white font-bold text-4xl'>Welcome to the game! Find the color:🟥</h1>
+                </div>
+                <div className='flex flex-col text-white border-2 shadow'>
+                    <p className='border-b-2 p-4'>⏱️ Time Remaining</p>
+
+                </div>
+                <div className='flex flex-col text-white border-2 shadow'>
+                    <p className='border-b-2 p-4'>🎬 Board Size</p>
+
+                </div>
+            </div>
 
             <div className='grid grid-cols-10  p-4  max-w-3xl mx-auto   '>
                 {ceels.map((_, index) => (
@@ -38,20 +56,20 @@ export default function GridLayout() {
                     <div
                         key={index}
                         onClick={() => handleClick(index)}
-                        className={`relative text-white w-full aspect-square border-2 border-white bg-black hover:bg-gray-500 cursor-pointer`}
+                        className={`relative text-white w-full aspect-square border-2 border-white bg-[#2d3d57] hover:bg-gray-500 cursor-pointer`}
 
 
                     >
 
                         {!found && clicked.includes(index) && index !== secretIndex && (
-                            <div className="absolute inset-0 flex items-center justify-center text-6xl">
+                            <div className="absolute inset-0 flex items-center justify-center text-6xl bg-[#91969c]">
                                 ❌
                             </div>
                         )}
 
                         {found && index === secretIndex && (
                             <div className="absolute inset-0 flex items-center justify-center text-6xl">
-                                <img src="unnamed.png" alt="YISHAI OSSI" />
+                                💣
                             </div>
                         )}
                     </div>
