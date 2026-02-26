@@ -1,32 +1,38 @@
 import React, { useState } from 'react'
-
+import GameHeader from './GameHeader'
 export default function GridLayout() {
     const [ceels, setCeels] = useState(Array.from({ length: 100 }))
-    const [secretIndex, setSecretIndex] = useState(Math.floor(Math.random() * 100))
+    const [secretIndexes] = useState(() => {
+    const indexes = new Set()
+    while (indexes.size < 5) {
+        indexes.add(Math.floor(Math.random() * 100))
+    }
+    return Array.from(indexes)
+})
     const [clicks, setClick] = useState(0)
-    const [found, setFound] = useState(false)
+    const [foundBombs, setFoundBombs] = useState([])
     const [clicked, setClicked] = useState([])
-
-    console.log(secretIndex);
-
+    const [gameOver, setGameOver] = useState(false)
+    console.log(secretIndexes)
 
     function handleClick(index) {
-        console.log(
-            index
-        );
+    if (clicked.includes(index) || gameOver) return
 
-        if (clicked.includes(index)) return
+    setClick(prev => prev + 1)
+    setClicked(prev => [...prev, index])
 
-        setClick(prev => prev + 1)
-        setClicked(prev => [...prev, index])
+    if (secretIndexes.includes(index)) {
+        setFoundBombs(prev => {
+            const updated = [...prev, index]
 
-        if (index === secretIndex) {
-            setFound(true)
-        }
+            if (updated.length === 5) {
+                setGameOver(true)
+            }
+
+            return updated
+        })
     }
-
-
-
+}
     return (
         <section className='bg-[#182033]  text-center'>
             <header className='flex justify-between relative border-b-2  '>
@@ -35,20 +41,7 @@ export default function GridLayout() {
                 <p className='text-green-400'>Simulation Active</p>
             </header>
             <h2 className='text-white border-t-2 border-b-2 mt-4 p-4'>Locate and neutralize all bombs before time runs out.</h2>
-            <div className='flex justify-around h-30'>
-                <div className='flex flex-col text-white border-2 shadow'>
-                    <p className='border-b-2 p-4'>💣 Bomb Reamining</p>
-
-                </div>
-                <div className='flex flex-col text-white border-2 shadow'>
-                    <p className='border-b-2 p-4'>⏱️ Time Remaining</p>
-
-                </div>
-                <div className='flex flex-col text-white border-2 shadow'>
-                    <p className='border-b-2 p-4'>🎬 Board Size</p>
-
-                </div>
-            </div>
+            <GameHeader gameOver={gameOver} foundBombs={foundBombs}></GameHeader>
 
             <div className='grid grid-cols-10  p-4  max-w-3xl mx-auto   '>
                 {ceels.map((_, index) => (
@@ -61,13 +54,13 @@ export default function GridLayout() {
 
                     >
 
-                        {!found && clicked.includes(index) && index !== secretIndex && (
+                        {clicked.includes(index) && !secretIndexes.includes(index) && (
                             <div className="absolute inset-0 flex items-center justify-center text-6xl bg-[#91969c]">
                                 ❌
                             </div>
                         )}
 
-                        {found && index === secretIndex && (
+                        {foundBombs.includes(index) &&  (
                             <div className="absolute inset-0 flex items-center justify-center text-6xl">
                                 💣
                             </div>
@@ -77,7 +70,10 @@ export default function GridLayout() {
                 ))}
             </div>
             <h2 className='text-white font-bold text-4xl'>Clicks: {clicks}</h2>
-            <h3 className='text-yellow-500 font-bold text-4xl'>{found ? "weell done!" : "Keep Searching!"}</h3>
+        <h3 className='text-yellow-500 font-bold text-4xl'>
+    {foundBombs.length === 5 ? "Well done! All bombs neutralized!" : "Keep Searching!"}
+</h3>
+                <button className='bg-green-700 w-96 h-10 text-2xl text-amber-100 font-extrabold' onClick={()=> location.reload()}>reset game</button>
         </section>
     )
 }
